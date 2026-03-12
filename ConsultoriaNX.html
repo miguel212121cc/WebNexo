@@ -1,2 +1,671 @@
-# WebNexo
-Web de Consultoria Nexo
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Consultoría Estratégica | Asesores de Confianza</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0c0c0e;
+      --surface: #131316;
+      --border: #222228;
+      --gold: #c9a96e;
+      --gold-light: #e2c896;
+      --gold-dim: rgba(201,169,110,0.12);
+      --text: #e8e4dc;
+      --muted: #7a7870;
+      --white: #f5f2ed;
+      --serif: 'Cormorant Garamond', Georgia, serif;
+      --sans: 'DM Sans', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: var(--sans); font-weight: 300;
+      line-height: 1.7; overflow-x: hidden;
+    }
+    body::before {
+      content: ''; position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      opacity: .35; pointer-events: none; z-index: 0;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.4rem 6vw;
+      border-bottom: 1px solid transparent;
+      transition: background .4s, border-color .4s, backdrop-filter .4s;
+    }
+    nav.scrolled { background: rgba(12,12,14,.85); border-color: var(--border); backdrop-filter: blur(18px); }
+    .logo { font-family: var(--serif); font-size: 1.5rem; font-weight: 400; color: var(--white); letter-spacing: .04em; text-decoration: none; }
+    .logo span { color: var(--gold); }
+    .nav-links { display: flex; gap: 2.2rem; list-style: none; }
+    .nav-links a { font-size: .82rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color .2s; }
+    .nav-links a:hover { color: var(--gold); }
+    .nav-cta { padding: .55rem 1.5rem; border: 1px solid var(--gold); color: var(--gold); font-size: .82rem; letter-spacing: .1em; text-transform: uppercase; text-decoration: none; transition: background .2s, color .2s; }
+    .nav-cta:hover { background: var(--gold); color: var(--bg); }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
+    .hamburger span { width: 24px; height: 1px; background: var(--text); display: block; transition: .3s; }
+
+    /* ── HERO ── */
+    #inicio { min-height: 100svh; display: flex; flex-direction: column; justify-content: flex-end; padding: 0 6vw 8vh; position: relative; overflow: hidden; }
+    .hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 65% 40%, rgba(201,169,110,.07) 0%, transparent 65%), radial-gradient(ellipse 50% 80% at 10% 80%, rgba(201,169,110,.04) 0%, transparent 60%); }
+    .hero-line { position: absolute; top: 0; right: 18vw; width: 1px; height: 100%; background: linear-gradient(to bottom, transparent, var(--border) 30%, var(--border) 70%, transparent); opacity: .5; }
+    .hero-number { position: absolute; top: 50%; right: 20vw; transform: translateY(-50%); font-family: var(--serif); font-size: clamp(14rem, 22vw, 22rem); font-weight: 300; color: transparent; -webkit-text-stroke: 1px rgba(201,169,110,.06); line-height: 1; user-select: none; }
+    .hero-tag { display: inline-flex; align-items: center; gap: .7rem; font-size: .75rem; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: 2rem; opacity: 0; animation: fadeUp .8s .2s forwards; }
+    .hero-tag::before { content: ''; width: 28px; height: 1px; background: var(--gold); }
+    h1 { font-family: var(--serif); font-size: clamp(3.2rem, 7vw, 7rem); font-weight: 300; line-height: 1.05; color: var(--white); max-width: 820px; opacity: 0; animation: fadeUp .9s .4s forwards; }
+    h1 em { font-style: italic; color: var(--gold); }
+    .hero-sub { max-width: 480px; margin-top: 2rem; color: var(--muted); font-size: .95rem; opacity: 0; animation: fadeUp .9s .6s forwards; }
+    .hero-actions { display: flex; align-items: center; gap: 2rem; margin-top: 3rem; opacity: 0; animation: fadeUp .9s .8s forwards; }
+    .btn-primary { padding: .9rem 2.4rem; background: var(--gold); color: var(--bg); font-size: .85rem; letter-spacing: .1em; text-transform: uppercase; text-decoration: none; font-weight: 500; transition: background .2s, transform .2s; cursor: pointer; border: none; }
+    .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
+    .btn-ghost { font-size: .85rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); text-decoration: none; display: flex; align-items: center; gap: .6rem; transition: color .2s; cursor: pointer; background: none; border: none; }
+    .btn-ghost:hover { color: var(--text); }
+    .btn-ghost::after { content: '→'; transition: transform .2s; }
+    .btn-ghost:hover::after { transform: translateX(4px); }
+    .hero-stats { display: flex; gap: 3rem; margin-top: 5rem; border-top: 1px solid var(--border); padding-top: 2rem; opacity: 0; animation: fadeUp .9s 1s forwards; }
+    .stat-num { font-family: var(--serif); font-size: 2.4rem; font-weight: 300; color: var(--gold); line-height: 1; }
+    .stat-label { font-size: .75rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-top: .3rem; }
+
+    /* ── SECTIONS ── */
+    section { position: relative; z-index: 1; }
+    .section-pad { padding: 7rem 6vw; }
+    .section-tag { font-size: .72rem; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); display: flex; align-items: center; gap: .7rem; margin-bottom: 1.2rem; }
+    .section-tag::before { content: ''; width: 22px; height: 1px; background: var(--gold); }
+    h2 { font-family: var(--serif); font-size: clamp(2.2rem, 4vw, 3.8rem); font-weight: 300; line-height: 1.1; color: var(--white); }
+    h2 em { font-style: italic; color: var(--gold); }
+
+    /* ── SERVICES ── */
+    #servicios { background: var(--surface); }
+    .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1px; margin-top: 4rem; border: 1px solid var(--border); }
+    .service-card { padding: 2.8rem 2.4rem; border-right: 1px solid var(--border); background: var(--surface); transition: background .3s; }
+    .service-card:last-child { border-right: none; }
+    .service-card:hover { background: var(--gold-dim); }
+    .service-icon { width: 42px; height: 42px; border: 1px solid var(--gold); display: flex; align-items: center; justify-content: center; margin-bottom: 1.8rem; color: var(--gold); font-size: 1.1rem; }
+    .service-card h3 { font-family: var(--serif); font-size: 1.5rem; font-weight: 400; color: var(--white); margin-bottom: .8rem; }
+    .service-card p { font-size: .88rem; color: var(--muted); line-height: 1.75; }
+    .service-more { display: inline-flex; align-items: center; gap: .5rem; margin-top: 1.5rem; font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); text-decoration: none; background: none; border: none; cursor: pointer; font-family: var(--sans); transition: gap .2s; }
+    .service-more:hover { gap: .9rem; }
+
+    /* ── ABOUT ── */
+    #nosotros .about-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center; margin-top: 1rem; }
+    .about-text p { color: var(--muted); margin-top: 1.5rem; font-size: .93rem; }
+    .about-values { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 3rem; }
+    .value-item { padding: 1.6rem; border: 1px solid var(--border); transition: border-color .2s, background .2s; }
+    .value-item:hover { border-color: var(--gold); background: var(--gold-dim); }
+    .value-item h4 { font-family: var(--serif); font-size: 1.1rem; color: var(--white); margin-bottom: .5rem; }
+    .value-item p { font-size: .82rem; color: var(--muted); }
+    .about-visual { position: relative; border: 1px solid var(--border); padding: 3rem; }
+    .about-visual::before { content: ''; position: absolute; top: -8px; left: -8px; width: 60px; height: 60px; border-top: 1px solid var(--gold); border-left: 1px solid var(--gold); }
+    .about-visual::after { content: ''; position: absolute; bottom: -8px; right: -8px; width: 60px; height: 60px; border-bottom: 1px solid var(--gold); border-right: 1px solid var(--gold); }
+    .quote-block { font-family: var(--serif); font-size: clamp(1.4rem, 2.5vw, 2rem); font-weight: 300; font-style: italic; color: var(--text); line-height: 1.45; }
+    .quote-block span { color: var(--gold); }
+    .quote-author { margin-top: 2rem; font-size: .78rem; letter-spacing: .15em; text-transform: uppercase; color: var(--muted); }
+    .about-numbers { display: flex; flex-direction: column; gap: 1.5rem; margin-top: 2.5rem; }
+    .about-num-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 1rem; }
+    .about-num-row:last-child { border-bottom: none; }
+    .about-num-label { font-size: .82rem; color: var(--muted); letter-spacing: .05em; }
+    .about-num-val { font-family: var(--serif); font-size: 1.8rem; font-weight: 300; color: var(--gold); }
+
+    /* ── PROCESS ── */
+    #proceso { background: var(--surface); }
+    .process-header { max-width: 600px; }
+    .process-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0; margin-top: 4rem; border: 1px solid var(--border); }
+    .step { padding: 2.5rem 2rem; border-right: 1px solid var(--border); position: relative; }
+    .step:last-child { border-right: none; }
+    .step-num { font-family: var(--serif); font-size: 3.5rem; font-weight: 300; color: transparent; -webkit-text-stroke: 1px var(--border); line-height: 1; margin-bottom: 1.5rem; }
+    .step:hover .step-num { -webkit-text-stroke-color: var(--gold); transition: .3s; }
+    .step h3 { font-family: var(--serif); font-size: 1.3rem; color: var(--white); margin-bottom: .7rem; }
+    .step p { font-size: .85rem; color: var(--muted); }
+
+    /* ── TESTIMONIALS ── */
+    .testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 3.5rem; }
+    .testimonial { padding: 2.4rem; border: 1px solid var(--border); position: relative; transition: border-color .3s; }
+    .testimonial:hover { border-color: var(--gold); }
+    .testimonial::before { content: '"'; font-family: var(--serif); font-size: 6rem; line-height: .6; color: var(--gold); opacity: .15; position: absolute; top: 1.5rem; right: 2rem; }
+    .testimonial p { font-size: .92rem; color: var(--text); font-style: italic; line-height: 1.8; margin-bottom: 1.8rem; }
+    .testimonial-author { display: flex; align-items: center; gap: 1rem; }
+    .author-avatar { width: 40px; height: 40px; border: 1px solid var(--gold); display: flex; align-items: center; justify-content: center; font-family: var(--serif); font-size: 1.1rem; color: var(--gold); background: var(--gold-dim); flex-shrink: 0; }
+    .author-name { font-size: .85rem; color: var(--white); font-weight: 500; }
+    .author-role { font-size: .78rem; color: var(--muted); }
+
+    /* ── CONTACT ── */
+    #contacto { background: var(--surface); }
+    .contact-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; margin-top: 3rem; }
+    .contact-info h3 { font-family: var(--serif); font-size: 1.8rem; font-weight: 300; color: var(--white); margin-bottom: 1rem; }
+    .contact-info p { color: var(--muted); font-size: .9rem; }
+    .contact-details { margin-top: 2.5rem; display: flex; flex-direction: column; gap: 1.2rem; }
+    .contact-item { display: flex; align-items: flex-start; gap: 1rem; font-size: .88rem; }
+    .contact-item-icon { width: 32px; height: 32px; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: .85rem; flex-shrink: 0; margin-top: .1rem; }
+    .contact-item-label { font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); display: block; }
+    .contact-item-val { color: var(--text); text-decoration: none; transition: color .2s; }
+    a.contact-item-val:hover { color: var(--gold); }
+    .contact-form { display: flex; flex-direction: column; gap: 1.2rem; }
+    .form-group { display: flex; flex-direction: column; gap: .4rem; }
+    .form-group label { font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+    .form-group input, .form-group textarea, .form-group select { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: .9rem 1rem; font-family: var(--sans); font-size: .88rem; font-weight: 300; outline: none; transition: border-color .2s; resize: none; appearance: none; }
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--gold); }
+    .form-group textarea { min-height: 120px; }
+    .form-group select option { background: var(--bg); }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .btn-submit { padding: 1rem 2.5rem; background: var(--gold); color: var(--bg); border: none; cursor: pointer; font-family: var(--sans); font-size: .85rem; letter-spacing: .1em; text-transform: uppercase; font-weight: 500; align-self: flex-start; transition: background .2s, transform .2s; }
+    .btn-submit:hover { background: var(--gold-light); transform: translateY(-2px); }
+    .btn-submit:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+    .form-success { display: none; text-align: center; padding: 2rem; border: 1px solid var(--gold); background: var(--gold-dim); }
+    .form-success h4 { font-family: var(--serif); font-size: 1.4rem; color: var(--white); margin-bottom: .5rem; }
+    .form-success p { color: var(--muted); font-size: .88rem; }
+
+    /* ── FOOTER ── */
+    footer { border-top: 1px solid var(--border); padding: 3rem 6vw; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem; }
+    .footer-logo { font-family: var(--serif); font-size: 1.2rem; color: var(--white); }
+    .footer-logo span { color: var(--gold); }
+    .footer-links { display: flex; gap: 2rem; list-style: none; }
+    .footer-links a { font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color .2s; }
+    .footer-links a:hover { color: var(--gold); }
+    .footer-copy { font-size: .78rem; color: var(--muted); }
+    .divider { height: 1px; background: var(--border); margin: 0 6vw; }
+
+    /* ── WHATSAPP FLOATING ── */
+    .whatsapp-btn {
+      position: fixed; bottom: 2rem; right: 2rem; z-index: 200;
+      width: 58px; height: 58px; border-radius: 50%;
+      background: #25D366; color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      text-decoration: none; box-shadow: 0 4px 20px rgba(37,211,102,.4);
+      transition: transform .2s, box-shadow .2s;
+      font-size: 1.5rem;
+    }
+    .whatsapp-btn:hover { transform: scale(1.1); box-shadow: 0 6px 28px rgba(37,211,102,.55); }
+    .whatsapp-btn svg { width: 28px; height: 28px; fill: white; }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 300;
+      background: rgba(0,0,0,.75); backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 2rem;
+      opacity: 0; pointer-events: none; transition: opacity .3s;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal {
+      background: var(--surface); border: 1px solid var(--border);
+      max-width: 580px; width: 100%;
+      padding: 3rem;
+      position: relative;
+      transform: translateY(20px); transition: transform .3s;
+    }
+    .modal-overlay.open .modal { transform: translateY(0); }
+    .modal::before { content: ''; position: absolute; top: -6px; left: -6px; width: 40px; height: 40px; border-top: 1px solid var(--gold); border-left: 1px solid var(--gold); }
+    .modal::after { content: ''; position: absolute; bottom: -6px; right: -6px; width: 40px; height: 40px; border-bottom: 1px solid var(--gold); border-right: 1px solid var(--gold); }
+    .modal-close { position: absolute; top: 1.2rem; right: 1.2rem; background: none; border: none; color: var(--muted); font-size: 1.4rem; cursor: pointer; line-height: 1; transition: color .2s; }
+    .modal-close:hover { color: var(--gold); }
+    .modal-icon { width: 48px; height: 48px; border: 1px solid var(--gold); display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 1.2rem; margin-bottom: 1.5rem; }
+    .modal h3 { font-family: var(--serif); font-size: 2rem; font-weight: 300; color: var(--white); margin-bottom: 1rem; }
+    .modal-desc { color: var(--muted); font-size: .9rem; line-height: 1.8; margin-bottom: 1.5rem; }
+    .modal-includes { list-style: none; display: flex; flex-direction: column; gap: .7rem; margin-bottom: 2rem; }
+    .modal-includes li { font-size: .87rem; color: var(--text); display: flex; align-items: flex-start; gap: .7rem; }
+    .modal-includes li::before { content: '◈'; color: var(--gold); font-size: .7rem; margin-top: .3rem; flex-shrink: 0; }
+    .modal-cta { display: inline-flex; padding: .9rem 2.2rem; background: var(--gold); color: var(--bg); font-size: .82rem; letter-spacing: .1em; text-transform: uppercase; text-decoration: none; font-weight: 500; transition: background .2s; border: none; cursor: pointer; font-family: var(--sans); }
+    .modal-cta:hover { background: var(--gold-light); }
+
+    /* ── SCROLL REVEAL ── */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity .8s, transform .8s; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    @keyframes fadeUp { to { opacity: 1; transform: none; } }
+
+    /* ── MOBILE ── */
+    @media (max-width: 860px) {
+      .nav-links, .nav-cta { display: none; }
+      .hamburger { display: flex; }
+      .nav-links.open { display: flex; flex-direction: column; gap: 1.5rem; position: fixed; inset: 0; background: var(--bg); padding: 6rem 6vw; z-index: 99; }
+      .nav-links.open a { font-size: 1rem; color: var(--text); }
+      h1 { font-size: clamp(2.8rem, 11vw, 5rem); }
+      .hero-stats { flex-wrap: wrap; gap: 1.5rem; }
+      #nosotros .about-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .contact-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .form-row { grid-template-columns: 1fr; }
+      .about-values { grid-template-columns: 1fr; }
+      footer { flex-direction: column; align-items: flex-start; }
+      .modal { padding: 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════
+     WHATSAPP FLOATING BUTTON
+     ✏️ Cambia el número: 34600000000
+     ══════════════════════════════ -->
+<a href="https://wa.me/34600000000?text=Hola%2C%20me%20gustar%C3%ADa%20solicitar%20una%20consulta%20gratuita"
+   class="whatsapp-btn" target="_blank" rel="noopener" title="Escríbenos por WhatsApp">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+    <path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.117 1.528 5.849L.057 23.571a.75.75 0 0 0 .937.924l5.896-1.635A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75a9.694 9.694 0 0 1-4.953-1.358l-.355-.211-3.682 1.021 1.008-3.584-.232-.369A9.718 9.718 0 0 1 2.25 12C2.25 6.615 6.615 2.25 12 2.25S21.75 6.615 21.75 12 17.385 21.75 12 21.75z"/>
+  </svg>
+</a>
+
+<!-- ══════════════════════════════
+     MODALES DE SERVICIOS (×4)
+     ══════════════════════════════ -->
+<div class="modal-overlay" id="modal-estrategia" role="dialog" aria-modal="true">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-estrategia')" aria-label="Cerrar">✕</button>
+    <div class="modal-icon">◈</div>
+    <h3>Estrategia Empresarial</h3>
+    <p class="modal-desc">Diseñamos planes estratégicos a medida que alinean tu visión con acciones concretas. Partimos de un diagnóstico riguroso para definir el camino más eficiente hacia tus objetivos.</p>
+    <ul class="modal-includes">
+      <li>Análisis DAFO y diagnóstico de situación</li>
+      <li>Definición de objetivos estratégicos y KPIs</li>
+      <li>Hoja de ruta con acciones prioritarias</li>
+      <li>Estudio de mercado y análisis competitivo</li>
+      <li>Seguimiento trimestral del plan</li>
+    </ul>
+    <button class="modal-cta" onclick="closeModal('modal-estrategia'); scrollToContact('Estrategia Empresarial')">Solicitar consulta gratuita</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-financiero" role="dialog" aria-modal="true">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-financiero')" aria-label="Cerrar">✕</button>
+    <div class="modal-icon">⬡</div>
+    <h3>Asesoría Financiera</h3>
+    <p class="modal-desc">Optimizamos la estructura financiera de tu empresa. Desde la planificación presupuestaria hasta la búsqueda de financiación, trabajamos para maximizar tu rentabilidad y reducir riesgos.</p>
+    <ul class="modal-includes">
+      <li>Auditoría y diagnóstico financiero</li>
+      <li>Planificación presupuestaria y tesorería</li>
+      <li>Búsqueda y gestión de financiación</li>
+      <li>Optimización fiscal y ahorro de costes</li>
+      <li>Control de gestión y cuadro de mando</li>
+    </ul>
+    <button class="modal-cta" onclick="closeModal('modal-financiero'); scrollToContact('Asesoría Financiera')">Solicitar consulta gratuita</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-digital" role="dialog" aria-modal="true">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-digital')" aria-label="Cerrar">✕</button>
+    <div class="modal-icon">◇</div>
+    <h3>Transformación Digital</h3>
+    <p class="modal-desc">Guiamos tu proceso de digitalización con un enfoque práctico y sin tecnicismos. Identificamos las herramientas y procesos que realmente impactan en tu negocio, evitando inversiones innecesarias.</p>
+    <ul class="modal-includes">
+      <li>Auditoría de madurez digital</li>
+      <li>Selección e implantación de herramientas (CRM, ERP…)</li>
+      <li>Automatización de procesos internos</li>
+      <li>Formación y gestión del cambio para el equipo</li>
+      <li>Estrategia de presencia digital y ventas online</li>
+    </ul>
+    <button class="modal-cta" onclick="closeModal('modal-digital'); scrollToContact('Transformación Digital')">Solicitar consulta gratuita</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-legal" role="dialog" aria-modal="true">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-legal')" aria-label="Cerrar">✕</button>
+    <div class="modal-icon">△</div>
+    <h3>Consultoría Legal</h3>
+    <p class="modal-desc">Protegemos tu empresa con asesoramiento jurídico preventivo y reactivo. Desde la constitución hasta el día a día legal, aseguramos que operes con plena seguridad y cumplimiento normativo.</p>
+    <ul class="modal-includes">
+      <li>Constitución y estructura societaria</li>
+      <li>Redacción y revisión de contratos</li>
+      <li>Compliance y protección de datos (RGPD)</li>
+      <li>Resolución de conflictos mercantiles</li>
+      <li>Gestión laboral y relaciones con empleados</li>
+    </ul>
+    <button class="modal-cta" onclick="closeModal('modal-legal'); scrollToContact('Consultoría Legal')">Solicitar consulta gratuita</button>
+  </div>
+</div>
+
+<!-- ══════════════ NAV ══════════════ -->
+<nav id="navbar">
+  <a href="#inicio" class="logo">Nexus<span>.</span>Consultoría</a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#servicios" onclick="closeMobileMenu()">Servicios</a></li>
+    <li><a href="#nosotros" onclick="closeMobileMenu()">Nosotros</a></li>
+    <li><a href="#proceso" onclick="closeMobileMenu()">Método</a></li>
+    <li><a href="#testimonios" onclick="closeMobileMenu()">Clientes</a></li>
+    <li><a href="#contacto" onclick="closeMobileMenu()">Contacto</a></li>
+  </ul>
+  <a href="#contacto" class="nav-cta">Consulta Gratuita</a>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menú">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ══════════════ HERO ══════════════ -->
+<section id="inicio">
+  <div class="hero-bg"></div>
+  <div class="hero-line"></div>
+  <div class="hero-number">A</div>
+  <div class="hero-tag">Asesoría Estratégica Especializada</div>
+  <h1>Decisiones <em>inteligentes</em><br>para tu negocio</h1>
+  <p class="hero-sub">Acompañamos a empresas y profesionales a tomar decisiones estratégicas con claridad, método y resultados medibles desde el primer día.</p>
+  <div class="hero-actions">
+    <a href="#contacto" class="btn-primary">Empezar ahora</a>
+    <a href="#servicios" class="btn-ghost">Ver servicios</a>
+  </div>
+  <div class="hero-stats">
+    <div><div class="stat-num">+200</div><div class="stat-label">Clientes asesorados</div></div>
+    <div><div class="stat-num">15+</div><div class="stat-label">Años de experiencia</div></div>
+    <div><div class="stat-num">98%</div><div class="stat-label">Tasa de satisfacción</div></div>
+    <div><div class="stat-num">40+</div><div class="stat-label">Sectores cubiertos</div></div>
+  </div>
+</section>
+
+<!-- ══════════════ SERVICES ══════════════ -->
+<section id="servicios" class="section-pad">
+  <div class="section-tag reveal">Nuestros Servicios</div>
+  <h2 class="reveal">Lo que hacemos<br><em>mejor</em></h2>
+  <div class="services-grid reveal">
+    <div class="service-card">
+      <div class="service-icon">◈</div>
+      <h3>Estrategia Empresarial</h3>
+      <p>Diseñamos planes estratégicos a medida que alinean tu visión con acciones concretas. Analizamos mercado, competencia y recursos para trazar el camino más eficiente.</p>
+      <button class="service-more" onclick="openModal('modal-estrategia')">Saber más →</button>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">⬡</div>
+      <h3>Asesoría Financiera</h3>
+      <p>Optimizamos la estructura financiera de tu empresa. Desde la planificación presupuestaria hasta la búsqueda de financiación, maximizamos tu rentabilidad.</p>
+      <button class="service-more" onclick="openModal('modal-financiero')">Saber más →</button>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">◇</div>
+      <h3>Transformación Digital</h3>
+      <p>Guiamos tu proceso de digitalización con un enfoque práctico. Identificamos las herramientas y procesos que realmente impactan en tu negocio.</p>
+      <button class="service-more" onclick="openModal('modal-digital')">Saber más →</button>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">△</div>
+      <h3>Consultoría Legal</h3>
+      <p>Protegemos tu empresa con asesoramiento jurídico preventivo. Contratos, compliance, estructura societaria y todo lo que necesitas para operar con seguridad.</p>
+      <button class="service-more" onclick="openModal('modal-legal')">Saber más →</button>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════════════ ABOUT ══════════════ -->
+<section id="nosotros" class="section-pad">
+  <div class="about-inner">
+    <div class="about-text">
+      <div class="section-tag reveal">Sobre Nosotros</div>
+      <h2 class="reveal">Expertos que<br><em>entienden</em><br>tu sector</h2>
+      <p class="reveal">En Nexus Consultoría llevamos más de 15 años ayudando a empresas de todos los tamaños a crecer con solidez. Nuestro equipo multidisciplinar combina experiencia en finanzas, derecho, tecnología y management.</p>
+      <p class="reveal">No ofrecemos soluciones genéricas: cada cliente recibe un diagnóstico propio y un plan de acción específico para su realidad y sus objetivos.</p>
+      <div class="about-values reveal">
+        <div class="value-item"><h4>Rigor</h4><p>Análisis profundo antes de cualquier recomendación</p></div>
+        <div class="value-item"><h4>Cercanía</h4><p>Acompañamiento real, no solo informes</p></div>
+        <div class="value-item"><h4>Resultados</h4><p>Medimos el impacto de cada acción</p></div>
+        <div class="value-item"><h4>Confidencialidad</h4><p>Tu información está siempre protegida</p></div>
+      </div>
+    </div>
+    <div>
+      <div class="about-visual reveal">
+        <p class="quote-block">"La mejor asesoría no te dice <span>qué hacer</span>, te ayuda a tomar las decisiones correctas con <span>plena confianza</span>."</p>
+        <p class="quote-author">— Principio fundador de Nexus</p>
+        <div class="about-numbers">
+          <div class="about-num-row"><span class="about-num-label">Empresas acompañadas</span><span class="about-num-val">+200</span></div>
+          <div class="about-num-row"><span class="about-num-label">Proyectos completados</span><span class="about-num-val">+650</span></div>
+          <div class="about-num-row"><span class="about-num-label">Especialistas en plantilla</span><span class="about-num-val">18</span></div>
+          <div class="about-num-row"><span class="about-num-label">Ciudades donde operamos</span><span class="about-num-val">12</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ PROCESS ══════════════ -->
+<section id="proceso" class="section-pad">
+  <div class="process-header">
+    <div class="section-tag reveal">Nuestro Método</div>
+    <h2 class="reveal">Cómo trabajamos<br><em>contigo</em></h2>
+  </div>
+  <div class="process-steps reveal">
+    <div class="step"><div class="step-num">01</div><h3>Diagnóstico inicial</h3><p>Analizamos en profundidad tu situación actual, objetivos, recursos y el contexto del mercado en el que operas.</p></div>
+    <div class="step"><div class="step-num">02</div><h3>Plan personalizado</h3><p>Diseñamos una hoja de ruta específica para tu negocio con acciones concretas, plazos definidos y KPIs claros.</p></div>
+    <div class="step"><div class="step-num">03</div><h3>Implementación</h3><p>Ejecutamos y acompañamos el plan contigo, adaptándonos a los cambios del entorno con agilidad y criterio.</p></div>
+    <div class="step"><div class="step-num">04</div><h3>Seguimiento y mejora</h3><p>Medimos resultados de forma continua, ajustamos la estrategia y garantizamos que el progreso se mantenga en el tiempo.</p></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════════════ TESTIMONIALS ══════════════ -->
+<section id="testimonios" class="section-pad">
+  <div class="section-tag reveal">Testimonios</div>
+  <h2 class="reveal">Lo que dicen<br><em>nuestros clientes</em></h2>
+  <div class="testimonials-grid reveal">
+    <div class="testimonial">
+      <p>Gracias al equipo de Nexus conseguimos ordenar nuestras finanzas y acceder a una línea de financiación que no creíamos posible. En seis meses doblamos nuestra capacidad productiva.</p>
+      <div class="testimonial-author"><div class="author-avatar">M</div><div><div class="author-name">María González</div><div class="author-role">CEO, Manufacturas del Sur</div></div></div>
+    </div>
+    <div class="testimonial">
+      <p>La transformación digital de nuestra empresa parecía imposible, pero con su guía lo hicimos en tiempo récord. El ahorro en procesos fue inmediato y el equipo lo adoptó sin resistencia.</p>
+      <div class="testimonial-author"><div class="author-avatar">J</div><div><div class="author-name">Javier Morales</div><div class="author-role">Director General, Grupo Morales</div></div></div>
+    </div>
+    <div class="testimonial">
+      <p>El asesoramiento legal que recibimos nos evitó un conflicto societario muy costoso. Profesionalidad, discreción y sobre todo, soluciones reales. No cambiaría de consultores.</p>
+      <div class="testimonial-author"><div class="author-avatar">A</div><div><div class="author-name">Ana Ruiz</div><div class="author-role">Socia fundadora, Ruiz &amp; Asociados</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     CONTACT + FORMULARIO (Formspree)
+     ✏️ Reemplaza XXXXXXXX con tu ID Formspree
+     ══════════════════════════════════════════ -->
+<section id="contacto" class="section-pad">
+  <div class="section-tag reveal">Contacto</div>
+  <h2 class="reveal">Hablemos de<br><em>tu proyecto</em></h2>
+  <div class="contact-inner">
+    <div>
+      <div class="contact-info reveal">
+        <h3>Primera consulta sin coste ni compromiso</h3>
+        <p>Cuéntanos tu situación y te diremos cómo podemos ayudarte. Nuestros asesores responden en menos de 24 horas.</p>
+      </div>
+      <div class="contact-details reveal">
+        <!-- ✏️ Cambia el email -->
+        <div class="contact-item">
+          <div class="contact-item-icon">✉</div>
+          <div>
+            <span class="contact-item-label">Email</span>
+            <a href="mailto:hola@nexusconsultoria.es" class="contact-item-val">hola@nexusconsultoria.es</a>
+          </div>
+        </div>
+        <!-- ✏️ Cambia el teléfono -->
+        <div class="contact-item">
+          <div class="contact-item-icon">✆</div>
+          <div>
+            <span class="contact-item-label">Teléfono</span>
+            <a href="tel:+34900000000" class="contact-item-val">+34 900 000 000</a>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-icon">◎</div>
+          <div>
+            <span class="contact-item-label">Oficinas</span>
+            <span class="contact-item-val">Madrid · Barcelona · Sevilla</span>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-icon">◷</div>
+          <div>
+            <span class="contact-item-label">Horario</span>
+            <span class="contact-item-val">Lunes a Viernes, 9:00 – 19:00</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="reveal">
+      <!-- ✏️ Cambia XXXXXXXX por tu ID de Formspree -->
+      <form class="contact-form" id="contactForm"
+            action="https://formspree.io/f/XXXXXXXX"
+            method="POST"
+            onsubmit="handleSubmit(event)">
+
+        <!-- Campo oculto: se rellena automáticamente desde los modales -->
+        <input type="hidden" name="_subject" value="Nueva consulta desde la web" />
+        <input type="hidden" name="servicio_interes" id="hiddenServicio" value="" />
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="nombre">Nombre</label>
+            <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" required />
+          </div>
+          <div class="form-group">
+            <label for="empresa">Empresa</label>
+            <input type="text" id="empresa" name="empresa" placeholder="Tu empresa" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" placeholder="tu@email.com" required />
+        </div>
+        <div class="form-group">
+          <label for="telefono">Teléfono (opcional)</label>
+          <input type="tel" id="telefono" name="telefono" placeholder="+34 600 000 000" />
+        </div>
+        <div class="form-group">
+          <label for="servicio">Servicio de interés</label>
+          <select id="servicio" name="servicio">
+            <option value="">Selecciona un servicio</option>
+            <option>Estrategia Empresarial</option>
+            <option>Asesoría Financiera</option>
+            <option>Transformación Digital</option>
+            <option>Consultoría Legal</option>
+            <option>Otro</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="mensaje">Cuéntanos tu situación</label>
+          <textarea id="mensaje" name="mensaje" placeholder="Describe brevemente tu proyecto o consulta..." required></textarea>
+        </div>
+        <button type="submit" class="btn-submit" id="submitBtn">Enviar consulta</button>
+      </form>
+
+      <div class="form-success" id="formSuccess">
+        <h4>¡Mensaje recibido!</h4>
+        <p>Nuestro equipo se pondrá en contacto contigo en menos de 24 horas.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ FOOTER ══════════════ -->
+<footer>
+  <div class="footer-logo">Nexus<span>.</span>Consultoría</div>
+  <ul class="footer-links">
+    <li><a href="#servicios">Servicios</a></li>
+    <li><a href="#nosotros">Nosotros</a></li>
+    <li><a href="#proceso">Método</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+  <span class="footer-copy">© 2025 Nexus Consultoría · Todos los derechos reservados</span>
+</footer>
+
+<!-- ══════════════ JAVASCRIPT ══════════════ -->
+<script>
+  /* ── Nav scroll ── */
+  const nav = document.getElementById('navbar');
+  window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 40));
+
+  /* ── Mobile menu ── */
+  function toggleMenu() {
+    const links = document.getElementById('navLinks');
+    links.classList.toggle('open');
+  }
+  function closeMobileMenu() {
+    document.getElementById('navLinks').classList.remove('open');
+  }
+
+  /* ── Scroll reveal ── */
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        e.target.style.transitionDelay = (i * 0.08) + 's';
+        e.target.classList.add('visible');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  /* ── Modals ── */
+  function openModal(id) {
+    document.getElementById(id).classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal(id) {
+    document.getElementById(id).classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // Cerrar modal al hacer clic fuera
+  document.querySelectorAll('.modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', function(e) {
+      if (e.target === this) closeModal(this.id);
+    });
+  });
+
+  // Cerrar modal con tecla Escape
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.modal-overlay.open').forEach(m => closeModal(m.id));
+    }
+  });
+
+  /* ── Scroll al formulario y preseleccionar servicio ── */
+  function scrollToContact(servicio) {
+    const select = document.getElementById('servicio');
+    if (servicio) {
+      for (let opt of select.options) {
+        if (opt.value === servicio) { opt.selected = true; break; }
+      }
+    }
+    document.getElementById('contacto').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  /* ── Form submit (Formspree) ── */
+  async function handleSubmit(e) {
+    e.preventDefault();
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.textContent = 'Enviando…';
+
+    const form = document.getElementById('contactForm');
+    const data = new FormData(form);
+
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST',
+        body: data,
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        form.style.display = 'none';
+        document.getElementById('formSuccess').style.display = 'block';
+      } else {
+        btn.disabled = false;
+        btn.textContent = 'Enviar consulta';
+        alert('Hubo un error al enviar. Por favor, inténtalo de nuevo.');
+      }
+    } catch {
+      btn.disabled = false;
+      btn.textContent = 'Enviar consulta';
+      alert('Error de conexión. Por favor, inténtalo de nuevo.');
+    }
+  }
+</script>
+</body>
+</html>
